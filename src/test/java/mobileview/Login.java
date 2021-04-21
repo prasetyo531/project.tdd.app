@@ -2,8 +2,12 @@ package mobileview;
 
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.remote.MobileCapabilityType;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -27,7 +31,7 @@ public class Login {
         capabilities.setCapability(MobileCapabilityType.BROWSER_NAME, "Chrome");
         //appium --allow-insecure chromedriver_autodownload
         capabilities.setCapability("chromedriverExecutableDir","/Users/fdn-prasetyo/Documents/chromedriver");
-        driver = new AndroidDriver(new URL("http://0.0.0.1:4723/wd/hub"),capabilities);
+        driver = new AndroidDriver(new URL("http://0.0.0.0:4723/wd/hub"),capabilities);
         wait = new WebDriverWait(driver, 10);
 
         driver.get("https://femaledaily.com");
@@ -35,22 +39,10 @@ public class Login {
 
     @Test
     public void basicTest () throws InterruptedException {
-        //Click and pass Splash
-        wait.until(ExpectedConditions.visibilityOfElementLocated
-                (By.id("com.isinolsun.app:id/animation_view"))).click();
+        Dimension size = driver.manage().window().getSize();
+        System.out.println(size);
 
-        //Click I am searching a job
-        wait.until(ExpectedConditions.visibilityOfElementLocated
-                (By.id("com.isinolsun.app:id/bluecollar_type_button"))).click();
-
-
-        //Notification Allow
-        if (driver.findElements(By.id("com.android.packageinstaller:id/permission_allow_button")).size()>0) {
-            driver.findElements(By.id("com.android.packageinstaller:id/permission_allow_button")).get(0).click();
-        }
-
-        wait.until(ExpectedConditions.visibilityOfElementLocated
-                (By.xpath(secondNewJob)));
+        wait.until(ExpectedConditions.elementToBeClickable((WebElement) driver.findElement(By.cssSelector("#id_notifhome"))));
     }
 
     @AfterMethod
